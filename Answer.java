@@ -19,6 +19,8 @@ public class Answer {
         return question.match(expected, i);
     }
     public boolean match(Answer otherAnswer) {
+        if(otherAnswer == null)
+            return false;
         return question.match(i, otherAnswer.i);
     }
     public Question getQuestion() {
