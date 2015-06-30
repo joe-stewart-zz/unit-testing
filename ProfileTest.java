@@ -1,5 +1,6 @@
 import static org.junit.Assert.*;
 import org.junit.*;
+import static org.hamcrest.CoreMatchers.*;
 
 public class ProfileTest {
     private Profile profile;
@@ -29,15 +30,7 @@ public class ProfileTest {
         criteria = new Criteria();
     }
     @Test
-    public void matchesNothingWhenProfileEmpty() {
-        Criterion criterion = new Criterion(answerThereIsRelocation, Weight.DontCare);
-
-        boolean result = profile.matches(criterion);
-
-        assertFalse(result);
-    }
-    @Test
-    public void matchesWhenProfileContainsMatchingAnswer() {
+    public void matchesCriterionWhenMatchesSoleAnswer() {
         Answer answer = new Answer(questionIsThereRelocation, Bool.TRUE);
         profile.add(answer);
         Criterion criterion = new Criterion(answerThereIsRelocation, Weight.Important);
@@ -47,7 +40,7 @@ public class ProfileTest {
         assertTrue(result);
     }
     @Test
-    public void doesNotMatchWhenNoMatchingAnswer() {
+    public void doesNotMatchCriterionWhenNoMatchingAnswerContained() {
         profile.add(answerThereIsNotRelocation);
         Criterion criterion = new Criterion(answerThereIsRelocation, Weight.Important);
 
@@ -56,7 +49,7 @@ public class ProfileTest {
         assertFalse(result);
     }
     @Test
-    public void matchesWhenContainsMultipleAnswers() {
+    public void matchesCriterionWhenOneOfMultipleAnswersMatches() {
         profile.add(answerThereIsRelocation);
         profile.add(answerDoesNotReimburseTuition);
         Criterion criterion = new Criterion(answerThereIsRelocation, Weight.Important);
@@ -66,7 +59,7 @@ public class ProfileTest {
         assertTrue(result);
     }
     @Test
-    public void doesNotMatchWhenNoneOfMultipleCriteriaMatch() {
+    public void doesNotMatchCriteriaWhenNoneOfMultipleCriteriaMatch() {
         profile.add(answerDoesNotReimburseTuition);
         Criteria criteria = new Criteria();
         criteria.add(new Criterion(answerThereIsRelocation, Weight.Important));
@@ -77,7 +70,7 @@ public class ProfileTest {
         assertFalse(result);
     }
     @Test
-    public void matchesWhenAnyOfMultipleCriteriaMatch() {
+    public void matchesCriteriaWhenAnyOfMultipleCriteriaMatch() {
         profile.add(answerThereIsRelocation);
         Criteria criteria = new Criteria();
         criteria.add(new Criterion(answerThereIsRelocation, Weight.Important));
@@ -86,5 +79,29 @@ public class ProfileTest {
         boolean result = profile.matches(criteria);
 
         assertTrue(result);
+    }
+    @Test
+    public void doesNotMatchWhenAnyMustMeetCriteriaNotMet() {
+        profile.add(answerThereIsRelocation);
+        profile.add(answerDoesNotReimburseTuition);
+        criteria.add(new Criterion(answerThereIsRelocation, Weight.Important));
+        criteria.add(new Criterion(answerReimbursesTuition, Weight.MustMatch));
+
+        assertFalse(profile.matches(criteria));
+    }
+    @Test
+    public void alwaysMatchesDontCareCriterion() {
+        profile.add(answerDoesNotReimburseTuition);
+        Criterion criterion = new Criterion(answerReimbursesTuition, Weight.DontCare);
+
+        assertTrue(profile.matches(criterion));
+    }
+    @Test
+    public void scoreIsZeroWhenThereAreNoMatches() {
+        criteria.add(new Criterion(answerThereIsRelocation, Weight.Important));
+
+        ProfileMatch match = profile.match(criteria);
+
+        assertThat(match.getScore(), equalTo(0));
     }
 }

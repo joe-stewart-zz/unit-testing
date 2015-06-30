@@ -8,16 +8,22 @@ public class Profile {
         return answers.get(criterion.getAnswer().getQuestionText());
     }
     public boolean matches(Criterion criterion) {
-        Answer answer = getMatchingProfileAnswer(criterion);
-        return criterion.getAnswer().match(answer);
+        return criterion.getWeight() == Weight.DontCare || criterion.getAnswer().match(getMatchingProfileAnswer(criterion));
     }
     public boolean matches(Criteria criteria) {
-        for(Criterion criterion : criteria)
+        boolean matches = false;
+        for(Criterion criterion : criteria) {
             if(matches(criterion))
-                return true;
-        return false;
+                matches = true;
+            else if(criterion.getWeight() == Weight.MustMatch)
+                return false;
+        }
+        return matches;
     }
     public void add(Answer answer) {
         answers.put(answer.getQuestionText(), answer);
+    }
+    public ProfileMatch match(Criteria criteria) {
+        return new ProfileMatch();
     }
 }
