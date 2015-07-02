@@ -1,3 +1,5 @@
+package com.joestewart.uts;
+
 public class Criterion implements Scoreable {
     private Weight weight;
     private Answer answer;

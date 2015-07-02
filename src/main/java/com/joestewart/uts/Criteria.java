@@ -1,3 +1,5 @@
+package com.joestewart.uts;
+
 import java.util.*;
 
 public class Criteria implements Iterable<Criterion> {

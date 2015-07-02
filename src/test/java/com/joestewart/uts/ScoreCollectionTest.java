@@ -1,3 +1,5 @@
+package com.joestewart.uts;
+
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.*;

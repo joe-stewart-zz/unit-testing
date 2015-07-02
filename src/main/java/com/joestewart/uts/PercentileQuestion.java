@@ -1,3 +1,5 @@
+package com.joestewart.uts;
+
 public class PercentileQuestion extends Question {
     public PercentileQuestion(int id, String text, String[] answerChoices) {
         super(id, text, answerChoices);

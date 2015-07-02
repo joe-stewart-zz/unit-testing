@@ -1,3 +1,5 @@
+package com.joestewart.uts;
+
 import java.util.*;
 import java.util.stream.*;
 import java.util.function.*;

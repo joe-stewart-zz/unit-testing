@@ -1,3 +1,5 @@
+package com.joestewart.uts;
+
 public abstract class Question {
     private String text;
     private String[] answerChoices;

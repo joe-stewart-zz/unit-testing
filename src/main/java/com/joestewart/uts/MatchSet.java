@@ -1,3 +1,5 @@
+package com.joestewart.uts;
+
 public class MatchSet {
     private AnswerCollection answers;
     private Criteria criteria;

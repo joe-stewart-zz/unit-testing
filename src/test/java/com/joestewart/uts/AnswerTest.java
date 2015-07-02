@@ -1,3 +1,5 @@
+package com.joestewart.uts;
+
 import static org.junit.Assert.*;
 import org.junit.*;
 
